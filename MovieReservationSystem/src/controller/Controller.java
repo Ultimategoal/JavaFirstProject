@@ -18,7 +18,7 @@ public class Controller {
 	
 	public static Map<String, Object> LoginUser;
 
-	//test
+
 	private UserService userService = UserService.getInstance();
 	
 	
