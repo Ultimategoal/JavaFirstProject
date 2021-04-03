@@ -29,8 +29,8 @@ public class JDBCUtil {
 		return instance;
 	}
 	
-	String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	String user = "PC21";
+	String url = "jdbc:oracle:thin:@192.168.44.157:1521:xe";
+	String user = "mooyaho";
 	String password = "java";
 
 	
@@ -234,8 +234,67 @@ public class JDBCUtil {
 		
 		return result;
 	}
+
+	public int transfer(String sql, Map<String,Object> param){ // 다른테이블로 데이터 넘기기
+		int result = 0;
+		
+		try {
+			
+			con = DriverManager.getConnection(url, user, password);
+			ps = con.prepareStatement(sql);
+			
+			ps.setObject(1, param.get("USID"));
+			ps.setObject(2, param.get("FOOD_CODE")); 
+			ps.setObject(3, param.get("QTY")); 
+		
+			result = ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) try { rs.close(); } catch(Exception e) {}
+			if(ps != null) try { ps.close(); } catch(Exception e) {}
+			if(con != null) try { con.close(); } catch(Exception e) {}
+		}
+		
+		return result;
+	}
+
+	public int transferAdv(String sql, Map<String,Object> param){ // 다른테이블로 데이터 넘기기
+		int result = 0;
+		
+		try {
+			
+			con = DriverManager.getConnection(url, user, password);
+			ps = con.prepareStatement(sql);
+			
+			
+			ps.setObject(1, param.get("ADVANTK_CODE"));
+			ps.setObject(2, param.get("SEAT_NO_CODE"));
+			ps.setObject(3, param.get("SCRINNG_CODE"));
+			ps.setObject(4, param.get("USID"));
+			ps.setObject(5, param.get("ADVANTK_AT"));
+			ps.setObject(6, param.get("THEAT_CODE"));
+			
+			String cineCode = (String)param.get("THEAT_CODE"); // 영화관 코드 넣기 위해 상영관 코드에서 앞글자 따오기
+			ps.setObject(7, cineCode.substring(0, 1));
+			
+			
+			result = ps.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) try { rs.close(); } catch(Exception e) {}
+			if(ps != null) try { ps.close(); } catch(Exception e) {}
+			if(con != null) try { con.close(); } catch(Exception e) {}
+		}
+		
+		return result;
+	}
 	
 }
+
 
 
 
